@@ -3,25 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Travle. — Geography Border Game</title>
+    <title>Fabian Gatter — Apps</title>
     <style>
-        body { font-family: -apple-system, sans-serif; background: #141416; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; }
-        .app-icon { width: 120px; height: 120px; border-radius: 26px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }
-        h1 { font-size: 3rem; margin-bottom: 0.5rem; }
-        p { color: #888; font-size: 1.1rem; margin-bottom: 2rem; }
-        a { background: #19AA80; color: #000; padding: 14px 28px; border-radius: 12px; text-decoration: none; font-weight: bold; }
-        .links { margin-top: 2rem; display: flex; gap: 20px; }
-        .links a { background: transparent; color: #555; font-size: 0.85rem; padding: 0; }
+        * { box-sizing: border-box; }
+        body {
+            font-family: -apple-system, sans-serif;
+            background: #141416;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 40px 20px;
+        }
+        .apps {
+            display: flex;
+            flex-direction: row;
+            gap: 60px;
+            align-items: flex-start;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .app-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            max-width: 260px;
+        }
+        .app-icon {
+            width: 120px;
+            height: 120px;
+            border-radius: 26px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+        h1 {
+            font-size: 2.6rem;
+            margin: 0 0 0.5rem 0;
+        }
+        p {
+            color: #888;
+            font-size: 1rem;
+            margin: 0 0 2rem 0;
+            line-height: 1.4;
+        }
+        .btn {
+            background: #19AA80;
+            color: #000;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        .links {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 20px;
+        }
+        .links a {
+            background: transparent;
+            color: #555;
+            font-size: 0.8rem;
+            text-decoration: none;
+        }
+        .links a:hover {
+            color: #888;
+        }
+        .divider {
+            width: 1px;
+            background: #2a2a2a;
+            align-self: stretch;
+            min-height: 280px;
+        }
+        @media (max-width: 600px) {
+            .divider { display: none; }
+            .apps { gap: 60px; }
+        }
     </style>
 </head>
 <body>
-    <img src="icon.png" alt="Travle. App Icon" class="app-icon">
-    <h1>travle.</h1>
-    <p>Navigate the world — one border at a time.</p>
-    <a href="https://apps.apple.com/us/app/travle-country-border-puzzle/id6760892359">Download on App Store</a>
-    <div class="links">
-        <a href="https://gist.github.com/FabianGatter/3cb34ad6c69c4fd29a9e2f348007ab87">Privacy Policy</a>
-        <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+    <div class="apps">
+
+        <div class="app-card">
+            <img src="icon.png" alt="Travle. App Icon" class="app-icon">
+            <h1>travle.</h1>
+            <p>Navigate the world — one border at a time.</p>
+            <a class="btn" href="https://apps.apple.com/us/app/travle-country-border-puzzle/id6760892359">Download on App Store</a>
+            <div class="links">
+                <a href="https://gist.github.com/FabianGatter/3cb34ad6c69c4fd29a9e2f348007ab87">Privacy Policy</a>
+                <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="app-card">
+            <img src="wordcrypt-icon.png" alt="WordCrypt App Icon" class="app-icon">
+            <h1>WordCrypt</h1>
+            <p>Find the word by meaning — a new puzzle every day.</p>
+            <a class="btn" href="https://apps.apple.com/app/wordcrypt">Download on App Store</a>
+            <div class="links">
+                <a href="https://gist.github.com/FabianGatter/3cb34ad6c69c4fd29a9e2f348007ab87">Privacy Policy</a>
+                <a href="https://www.apple.com/legal/internet-services/itunes/dev/stdeula/">Terms of Use</a>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>
