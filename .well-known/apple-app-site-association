@@ -1,0 +1,12 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": ["Y3288G5RDA.fabian.Travel-Earth-Game"],
+        "components": [
+          { "/": "/travle/c/*", "comment": "Challenge-a-friend links (checklist #29)" }
+        ]
+      }
+    ]
+  }
+}

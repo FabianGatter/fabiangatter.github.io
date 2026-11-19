@@ -1,0 +1,203 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-itunes-app" content="app-id=6760892359">
+<meta name="theme-color" content="#141417">
+<title>Travle challenge</title>
+<meta name="description" content="A friend challenges you to a Travle route. Connect the countries in as few guesses as you can.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Travle">
+<meta property="og:title" content="I challenge you to a Travle route! 🌍">
+<meta property="og:description" content="Connect the start and end country by naming the countries in between. Can you beat my score?">
+<meta property="og:image" content="https://fabiangatter.github.io/travle/c/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="I challenge you to a Travle route! 🌍">
+<meta name="twitter:image" content="https://fabiangatter.github.io/travle/c/og.png">
+<style>
+  :root {
+    --bg: #12131a; --bg2: #1b1e2c; --card: #222639; --card-edge: #151827;
+    --ink: #f5f6fc; --soft: #a9aec6; --line: #343a55;
+    --start: rgb(179, 77, 242); --start-edge: rgb(110, 35, 160);
+    --end: rgb(26, 217, 255); --end-edge: rgb(8, 128, 160);
+    --go: #62c71a; --go-edge: #3a7f0a;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; }
+  body {
+    min-height: 100vh; color: var(--ink); background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(179,77,242,.22), transparent 60%),
+      radial-gradient(1000px 600px at 110% 10%, rgba(26,217,255,.18), transparent 55%),
+      linear-gradient(180deg, var(--bg2), var(--bg));
+    font: 16px/1.45 -apple-system, BlinkMacSystemFont, "SF Pro Rounded", "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    display: flex; justify-content: center; padding: 20px 16px 32px;
+  }
+  main { width: 100%; max-width: 480px; }
+  .brand { display: flex; align-items: center; gap: 10px; justify-content: center; margin: 4px 0 18px; font-weight: 900; letter-spacing: .5px; font-size: 22px; }
+  .brand .dot { width: 14px; height: 14px; border-radius: 50%; background: var(--start); box-shadow: 0 0 14px var(--start); }
+  .brand .dot.end { background: var(--end); box-shadow: 0 0 14px var(--end); }
+  .card {
+    background: var(--card); border-radius: 28px; padding: 24px 20px 22px;
+    box-shadow: 0 6px 0 var(--card-edge), 0 18px 40px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.05);
+  }
+  .eyebrow { color: var(--soft); font-weight: 700; font-size: 13px; letter-spacing: 1.2px; text-transform: uppercase; text-align: center; margin: 0 0 6px; }
+  h1 { font-size: 26px; line-height: 1.15; margin: 0 0 18px; text-align: center; font-weight: 900; }
+  .route { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 6px; margin: 4px 0 6px; }
+  .place { text-align: center; }
+  .flag { font-size: 44px; line-height: 1; display: block; margin-bottom: 6px; }
+  .name { font-weight: 800; font-size: 17px; }
+  .place.start .name { color: var(--start); }
+  .place.end .name { color: var(--end); }
+  .path { width: 96px; height: 48px; }
+  .forbidden { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 12px 0 0; }
+  .chip { background: #2d1d24; color: #ffb3c0; border: 1px solid #5b2a37; border-radius: 999px; padding: 4px 10px; font-size: 13px; font-weight: 700; }
+  .score { margin: 18px 0 4px; text-align: center; font-weight: 800; font-size: 18px; }
+  .score small { display: block; color: var(--soft); font-weight: 600; font-size: 14px; margin-top: 2px; }
+  .btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+    padding: 16px 18px; margin-top: 14px; border-radius: 18px; text-decoration: none;
+    font-weight: 900; font-size: 17px; letter-spacing: .4px; text-transform: uppercase;
+    transition: transform .08s ease, box-shadow .08s ease;
+  }
+  .btn.primary { background: linear-gradient(180deg, #74dd2a, var(--go)); color: #0c2400; box-shadow: 0 6px 0 var(--go-edge); }
+  .btn.secondary { background: linear-gradient(180deg, #41e3ff, var(--end)); color: #032530; box-shadow: 0 6px 0 var(--end-edge); }
+  .btn:active { transform: translateY(5px); box-shadow: 0 1px 0 transparent; }
+  .btn:focus-visible { outline: 3px solid #fff; outline-offset: 3px; }
+  .how { margin-top: 22px; }
+  .how h2 { font-size: 17px; margin: 0 0 10px; font-weight: 900; }
+  .steps { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; }
+  .steps li { display: grid; grid-template-columns: 32px 1fr; gap: 10px; align-items: start; background: rgba(255,255,255,.04); border-radius: 16px; padding: 10px 12px; }
+  .steps .n { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; font-weight: 900; background: var(--start); box-shadow: 0 3px 0 var(--start-edge); }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 12px; margin-top: 6px; color: var(--soft); font-size: 14px; }
+  footer { text-align: center; color: var(--soft); font-size: 13px; margin-top: 22px; }
+  footer a { color: var(--soft); }
+  [hidden] { display: none !important; }
+  @media (prefers-reduced-motion: no-preference) {
+    .dash { stroke-dasharray: 6 7; animation: march 1.4s linear infinite; }
+    @keyframes march { to { stroke-dashoffset: -26; } }
+  }
+</style>
+</head>
+<body>
+<main>
+  <div class="brand" aria-hidden="true"><span class="dot"></span>Travle.<span class="dot end"></span></div>
+  <section class="card" aria-labelledby="title">
+    <p class="eyebrow" id="eyebrow"></p>
+    <h1 id="title"></h1>
+    <div class="route" id="route" hidden>
+      <div class="place start"><span class="flag" id="startFlag" aria-hidden="true"></span><span class="name" id="startName"></span></div>
+      <svg class="path" viewBox="0 0 96 48" aria-hidden="true">
+        <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="rgb(179,77,242)"/><stop offset="1" stop-color="rgb(26,217,255)"/></linearGradient></defs>
+        <path class="dash" d="M8 36 C 30 4, 66 4, 88 36" fill="none" stroke="url(#g)" stroke-width="4" stroke-linecap="round" stroke-dasharray="6 7"/>
+        <circle cx="8" cy="36" r="6" fill="rgb(179,77,242)"/><circle cx="88" cy="36" r="6" fill="rgb(26,217,255)"/>
+      </svg>
+      <div class="place end"><span class="flag" id="endFlag" aria-hidden="true"></span><span class="name" id="endName"></span></div>
+    </div>
+    <div class="forbidden" id="forbidden" hidden></div>
+    <p class="score" id="score" hidden></p>
+    <a class="btn primary" id="open" href="travle://home"></a>
+    <a class="btn secondary" id="store" href="https://apps.apple.com/app/id6760892359"></a>
+    <div class="how">
+      <h2 id="howTitle"></h2>
+      <ol class="steps">
+        <li><span class="n" aria-hidden="true">1</span><span id="step1"></span></li>
+        <li><span class="n" aria-hidden="true">2</span><span id="step2"></span></li>
+        <li><span class="n" aria-hidden="true">3</span><span><span id="step3"></span>
+          <span class="legend"><span id="lg1"></span><span id="lg2"></span><span id="lg3"></span><span id="lg4"></span></span></span></li>
+      </ol>
+    </div>
+  </section>
+  <footer>
+    <a id="privacy" href="https://gist.github.com/FabianGatter/3cb34ad6c69c4fd29a9e2f348007ab87"></a> ·
+    <a id="support" href="https://fabiangatter.github.io"></a>
+  </footer>
+</main>
+<script>
+const C={"DZA":["Algeria","DZ"],"AGO":["Angola","AO"],"BEN":["Benin","BJ"],"BWA":["Botswana","BW"],"BFA":["Burkina Faso","BF"],"BDI":["Burundi","BI"],"CMR":["Cameroon","CM"],"CPV":["Cape Verde","CV"],"CAF":["Central African Republic","CF"],"TCD":["Chad","TD"],"COM":["Comoros","KM"],"COD":["Democratic Republic of Congo","CD"],"DJI":["Djibouti","DJ"],"EGY":["Egypt","EG"],"GNQ":["Equatorial Guinea","GQ"],"ERI":["Eritrea","ER"],"SWZ":["Eswatini","SZ"],"ETH":["Ethiopia","ET"],"GAB":["Gabon","GA"],"GMB":["Gambia","GM"],"GHA":["Ghana","GH"],"GIN":["Guinea","GN"],"GNB":["Guinea-Bissau","GW"],"CIV":["Ivory Coast","CI"],"KEN":["Kenya","KE"],"LSO":["Lesotho","LS"],"LBR":["Liberia","LR"],"LBY":["Libya","LY"],"MDG":["Madagascar","MG"],"MWI":["Malawi","MW"],"MLI":["Mali","ML"],"MRT":["Mauritania","MR"],"MUS":["Mauritius","MU"],"MAR":["Morocco","MA"],"MOZ":["Mozambique","MZ"],"NAM":["Namibia","NA"],"NER":["Niger","NE"],"NGA":["Nigeria","NG"],"COG":["Republic of Congo","CG"],"RWA":["Rwanda","RW"],"STP":["São Tomé and Príncipe","ST"],"SEN":["Senegal","SN"],"SYC":["Seychelles","SC"],"SLE":["Sierra Leone","SL"],"SOM":["Somalia","SO"],"ZAF":["South Africa","ZA"],"SSD":["South Sudan","SS"],"SDN":["Sudan","SD"],"TZA":["Tanzania","TZ"],"TGO":["Togo","TG"],"TUN":["Tunisia","TN"],"UGA":["Uganda","UG"],"ESH":["Western Sahara","EH"],"ZMB":["Zambia","ZM"],"ZWE":["Zimbabwe","ZW"],"ATG":["Antigua and Barbuda","AG"],"ARG":["Argentina","AR"],"BHS":["Bahamas","BS"],"BRB":["Barbados","BB"],"BLZ":["Belize","BZ"],"BOL":["Bolivia","BO"],"BRA":["Brazil","BR"],"CAN":["Canada","CA"],"CHL":["Chile","CL"],"COL":["Colombia","CO"],"CRI":["Costa Rica","CR"],"CUB":["Cuba","CU"],"DMA":["Dominica","DM"],"DOM":["Dominican Republic","DO"],"ECU":["Ecuador","EC"],"SLV":["El Salvador","SV"],"GRD":["Grenada","GD"],"GTM":["Guatemala","GT"],"GUY":["Guyana","GY"],"HTI":["Haiti","HT"],"HND":["Honduras","HN"],"JAM":["Jamaica","JM"],"MEX":["Mexico","MX"],"NIC":["Nicaragua","NI"],"PAN":["Panama","PA"],"PRY":["Paraguay","PY"],"PER":["Peru","PE"],"KNA":["Saint Kitts and Nevis","KN"],"LCA":["Saint Lucia","LC"],"VCT":["Saint Vincent and the Grenadines","VC"],"SUR":["Suriname","SR"],"TTO":["Trinidad and Tobago","TT"],"USA":["United States","US"],"URY":["Uruguay","UY"],"VEN":["Venezuela","VE"],"AFG":["Afghanistan","AF"],"ARM":["Armenia","AM"],"AZE":["Azerbaijan","AZ"],"BHR":["Bahrain","BH"],"BGD":["Bangladesh","BD"],"BTN":["Bhutan","BT"],"BRN":["Brunei","BN"],"KHM":["Cambodia","KH"],"CHN":["China","CN"],"CYP":["Cyprus","CY"],"GEO":["Georgia","GE"],"IND":["India","IN"],"IDN":["Indonesia","ID"],"IRN":["Iran","IR"],"IRQ":["Iraq","IQ"],"ISR":["Israel","IL"],"JPN":["Japan","JP"],"JOR":["Jordan","JO"],"KAZ":["Kazakhstan","KZ"],"KWT":["Kuwait","KW"],"KGZ":["Kyrgyzstan","KG"],"LAO":["Laos","LA"],"LBN":["Lebanon","LB"],"MYS":["Malaysia","MY"],"MDV":["Maldives","MV"],"MNG":["Mongolia","MN"],"MMR":["Myanmar","MM"],"NPL":["Nepal","NP"],"PRK":["North Korea","KP"],"OMN":["Oman","OM"],"PAK":["Pakistan","PK"],"PSE":["Palestine","PS"],"PHL":["Philippines","PH"],"QAT":["Qatar","QA"],"RUS":["Russia","RU"],"SAU":["Saudi Arabia","SA"],"SGP":["Singapore","SG"],"KOR":["South Korea","KR"],"LKA":["Sri Lanka","LK"],"SYR":["Syria","SY"],"TWN":["Taiwan","TW"],"TJK":["Tajikistan","TJ"],"THA":["Thailand","TH"],"TLS":["Timor-Leste","TL"],"TUR":["Turkey","TR"],"TKM":["Turkmenistan","TM"],"ARE":["United Arab Emirates","AE"],"UZB":["Uzbekistan","UZ"],"VNM":["Vietnam","VN"],"YEM":["Yemen","YE"],"ALB":["Albania","AL"],"AND":["Andorra","AD"],"AUT":["Austria","AT"],"BLR":["Belarus","BY"],"BEL":["Belgium","BE"],"BIH":["Bosnia and Herzegovina","BA"],"BGR":["Bulgaria","BG"],"HRV":["Croatia","HR"],"CZE":["Czech Republic","CZ"],"DNK":["Denmark","DK"],"EST":["Estonia","EE"],"FIN":["Finland","FI"],"FRA":["France","FR"],"DEU":["Germany","DE"],"GRC":["Greece","GR"],"HUN":["Hungary","HU"],"ISL":["Iceland","IS"],"IRL":["Ireland","IE"],"ITA":["Italy","IT"],"XKX":["Kosovo","XK"],"LVA":["Latvia","LV"],"LIE":["Liechtenstein","LI"],"LTU":["Lithuania","LT"],"LUX":["Luxembourg","LU"],"MLT":["Malta","MT"],"MDA":["Moldova","MD"],"MCO":["Monaco","MC"],"MNE":["Montenegro","ME"],"NLD":["Netherlands","NL"],"MKD":["North Macedonia","MK"],"NOR":["Norway","NO"],"POL":["Poland","PL"],"PRT":["Portugal","PT"],"ROU":["Romania","RO"],"SMR":["San Marino","SM"],"SRB":["Serbia","RS"],"SVK":["Slovakia","SK"],"SVN":["Slovenia","SI"],"ESP":["Spain","ES"],"SWE":["Sweden","SE"],"CHE":["Switzerland","CH"],"UKR":["Ukraine","UA"],"GBR":["United Kingdom","GB"],"VAT":["Vatican City","VA"],"AUS":["Australia","AU"],"FJI":["Fiji","FJ"],"KIR":["Kiribati","KI"],"MHL":["Marshall Islands","MH"],"FSM":["Micronesia","FM"],"NRU":["Nauru","NR"],"NZL":["New Zealand","NZ"],"PLW":["Palau","PW"],"PNG":["Papua New Guinea","PG"],"WSM":["Samoa","WS"],"SLB":["Solomon Islands","SB"],"TON":["Tonga","TO"],"TUV":["Tuvalu","TV"],"VUT":["Vanuatu","VU"],"GUF":["French Guiana","GF"],"GRL":["Greenland","GL"]};
+const T = {
+  en: { eyebrow: "Friend's challenge", title: "Can you connect these countries?", generic: "Play Travle", genericSub: "The daily geography puzzle: connect two countries through their neighbours.",
+        beat: n => `Your friend made it in ${n} ${n === 1 ? "guess" : "guesses"}`, beatSub: "Can you beat that?", noScore: "Your friend wants to see you try!",
+        forbidden: "Not allowed", open: "Open in Travle", store: "Get Travle — free", how: "How Travle works",
+        s1: "You get a start and an end country.", s2: "Name the countries in between, border by border.",
+        s3: "Every guess gets a colour:", l1: "🟩 shortest path", l2: "🟧 one step longer", l3: "🟥 longer", l4: "⬛ no path",
+        privacy: "Privacy policy", support: "Support" },
+  sv: { eyebrow: "Väns utmaning", title: "Kan du binda ihop de här länderna?", generic: "Spela Travle", genericSub: "Det dagliga geografipusslet: koppla ihop två länder via deras grannar.",
+        beat: n => `Din vän klarade det på ${n} ${n === 1 ? "gissning" : "gissningar"}`, beatSub: "Kan du slå det?", noScore: "Din vän vill se dig försöka!",
+        forbidden: "Förbjudet", open: "Öppna i Travle", store: "Hämta Travle – gratis", how: "Så funkar Travle",
+        s1: "Du får ett startland och ett slutland.", s2: "Gissa länderna emellan, gräns för gräns.",
+        s3: "Varje gissning får en färg:", l1: "🟩 kortaste vägen", l2: "🟧 ett steg längre", l3: "🟥 längre", l4: "⬛ ingen väg",
+        privacy: "Integritetspolicy", support: "Support" },
+  de: { eyebrow: "Challenge von Freund:in", title: "Kannst du diese Länder verbinden?", generic: "Travle spielen", genericSub: "Das tägliche Geografie-Rätsel: Verbinde zwei Länder über ihre Nachbarn.",
+        beat: n => `Dein:e Freund:in hat ${n} ${n === 1 ? "Versuch" : "Versuche"} gebraucht`, beatSub: "Schaffst du es besser?", noScore: "Zeig, was du kannst!",
+        forbidden: "Verboten", open: "In Travle öffnen", store: "Travle laden – kostenlos", how: "So funktioniert Travle",
+        s1: "Du bekommst ein Start- und ein Zielland.", s2: "Nenne die Länder dazwischen, Grenze für Grenze.",
+        s3: "Jeder Tipp bekommt eine Farbe:", l1: "🟩 kürzester Weg", l2: "🟧 ein Schritt länger", l3: "🟥 länger", l4: "⬛ kein Weg",
+        privacy: "Datenschutz", support: "Support" },
+  es: { eyebrow: "Reto de un amigo", title: "¿Puedes conectar estos países?", generic: "Juega a Travle", genericSub: "El rompecabezas geográfico diario: conecta dos países a través de sus vecinos.",
+        beat: n => `Tu amigo lo logró en ${n} ${n === 1 ? "intento" : "intentos"}`, beatSub: "¿Puedes superarlo?", noScore: "¡Tu amigo quiere verte intentarlo!",
+        forbidden: "Prohibido", open: "Abrir en Travle", store: "Descargar Travle gratis", how: "Cómo funciona Travle",
+        s1: "Recibes un país de inicio y uno de destino.", s2: "Nombra los países intermedios, frontera a frontera.",
+        s3: "Cada intento recibe un color:", l1: "🟩 camino más corto", l2: "🟧 un paso más", l3: "🟥 más largo", l4: "⬛ sin camino",
+        privacy: "Privacidad", support: "Soporte" }
+};
+(function () {
+  const lang = ((navigator.language || "en").slice(0, 2).toLowerCase());
+  const t = T[lang] || T.en;
+  document.documentElement.lang = T[lang] ? lang : "en";
+  const set = (id, text) => { document.getElementById(id).textContent = text; };
+  let regionNames = null;
+  try { regionNames = new Intl.DisplayNames([document.documentElement.lang], { type: "region" }); } catch (e) {}
+  const flag = a2 => a2 && a2.length === 2 ? String.fromCodePoint(...[...a2].map(c => 0x1F1E6 + c.charCodeAt(0) - 65)) : "";
+  const name = id => {
+    const c = C[id]; if (!c) return id;
+    if (regionNames && c[1] && document.documentElement.lang !== "en") {
+      try { const n = regionNames.of(c[1]); if (n && n !== c[1]) return n; } catch (e) {}
+    }
+    return c[0];
+  };
+  const code = v => { v = (v || "").toUpperCase(); return /^[A-Z]{3}$/.test(v) && C[v] ? v : null; };
+
+  const q = new URLSearchParams(location.search);
+  const s = code(q.get("s")), e = code(q.get("e"));
+  const f = [...new Set((q.get("f") || "").split(",").map(code).filter(Boolean))].filter(x => x !== s && x !== e).slice(0, 3);
+  const gRaw = parseInt(q.get("g") || "", 10);
+  const g = Number.isInteger(gRaw) && gRaw >= 1 && gRaw <= 20 ? gRaw : null;
+
+  set("open", "🌍  " + t.open); set("store", " " + t.store); set("howTitle", t.how);
+  set("step1", t.s1); set("step2", t.s2); set("step3", t.s3);
+  set("lg1", t.l1); set("lg2", t.l2); set("lg3", t.l3); set("lg4", t.l4);
+  set("privacy", t.privacy); set("support", t.support);
+
+  if (s && e && s !== e) {
+    set("eyebrow", t.eyebrow); set("title", t.title);
+    set("startFlag", flag(C[s][1])); set("startName", name(s));
+    set("endFlag", flag(C[e][1])); set("endName", name(e));
+    document.getElementById("route").hidden = false;
+    document.getElementById("route").setAttribute("aria-label", name(s) + " → " + name(e));
+    if (f.length) {
+      const box = document.getElementById("forbidden");
+      const label = document.createElement("span"); label.className = "chip"; label.textContent = "🚫 " + t.forbidden + ":";
+      box.appendChild(label);
+      f.forEach(id => { const chip = document.createElement("span"); chip.className = "chip"; chip.textContent = flag(C[id][1]) + " " + name(id); box.appendChild(chip); });
+      box.hidden = false;
+    }
+    const score = document.getElementById("score");
+    score.textContent = g ? t.beat(g) : t.noScore;
+    if (g) { const small = document.createElement("small"); small.textContent = t.beatSub; score.appendChild(small); }
+    score.hidden = false;
+    const params = new URLSearchParams({ s: s, e: e });
+    if (f.length) params.set("f", f.join(","));
+    if (g) params.set("g", String(g));
+    document.getElementById("open").href = "travle://challenge?" + params.toString().replace(/%2C/g, ",");
+  } else {
+    set("eyebrow", "Travle"); set("title", t.generic);
+    const score = document.getElementById("score"); score.textContent = t.genericSub; score.hidden = false;
+  }
+})();
+</script>
+</body>
+</html>
